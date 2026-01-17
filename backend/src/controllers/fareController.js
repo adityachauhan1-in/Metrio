@@ -1,7 +1,6 @@
 import StationModel from "../models/StationModel.js"
 // for calculation of the fare . 
 export const calculateFare = async(req,res) => {
-    console.log("hii it is the controllers")
 try {
     const {from , to } = req.body ; 
             

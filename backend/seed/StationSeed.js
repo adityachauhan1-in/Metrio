@@ -24,7 +24,8 @@ const stations = [
     { name: "Begumpul", distance: 17.8 },
     { name: "Alamgirpur", distance: 20.0 },
     { name: "Bahchaula", distance: 3.6},
-    { name: "Nangla", distance: 5.2}
+    { name: "Nangla", distance: 5.2},
+    { name : "Sikhera", distance : 1.5}
   ];
 
   const seedStation = async() => {

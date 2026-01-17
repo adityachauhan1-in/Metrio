@@ -36,12 +36,20 @@ qrCode : {
     type : String , //here we store our qr_data as string, we will convert this into code while working on fronted . 
     required : true 
 },
-statusTicket : {
+status : {
     type : String , 
     enum : ["active" , "used","expire"],
     default : "active"
+},
+expiresAt : {
+    type : Date ,
+    required : true
+},
+
+usedAt : {
+    type : Date,
+    default : null
 }
- 
 },
 {timestamps:true},
   )
