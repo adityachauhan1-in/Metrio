@@ -7,8 +7,9 @@ import protectedRoute from './routes/protectedRoute.js'
 import ticketRoute from './routes/ticketRoute.js'
 import userRoutes from './routes/userRoutes.js'
 import adminRoute from './routes/adminRoute.js'
-import { getMyTicket } from "./controllers/tickHistoryController.js";
-import authMiddleware from "./middlewares/authMiddleware.js";
+// import { getMyTicket } from "./controllers/tickHistoryController.js";
+// import authMiddleware from "./middlewares/authMiddleware.js";
+import qrScanRoute from "./routes/qrScanRoute.js"
 dotenv.config();
 
 const app = express();
@@ -25,12 +26,13 @@ app.get("/" , (req,res) => {
     res.send("Meerut Metro API  running Alright  ")
 })
 
- app.use("/api",fareRoute);
- app.use("/api",protectedRoute);
-app.use("/api",ticketRoute);
-app.use("/api/auth",userRoutes);
-app.use("/api/role",adminRoute);
-app.use("/api/getmy/history",authMiddleware,getMyTicket)
+ app.use("/calculate",fareRoute);
+ app.use("/",protectedRoute); 
+app.use("/ticket",ticketRoute);
+app.use("/user",userRoutes);
+app.use("/role",adminRoute);
+// app.use("/api/getmy/history",authMiddleware,getMyTicket)
+app.use("/admin",qrScanRoute);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

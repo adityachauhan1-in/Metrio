@@ -6,7 +6,6 @@ export const ticketBooking = async(req,res) => {
   try {
       //  ===1 >> extract from , to and journeyType from the req.body 
         const {from , to , journeyType} = req.body ; 
-        console.log("REQ.USER =>", req.user);
 
         const userId  = req.user.id;
 
@@ -16,10 +15,7 @@ export const ticketBooking = async(req,res) => {
           status : "active"
         })
         if(statusTest){
-          console.log("DB expiresAt:", statusTest.expiresAt);
-console.log("Now:", new Date());
-console.log("Is expired:", statusTest.expiresAt < new Date());
-
+        
           // if active ticket exist , check expiry (if it is expire so we mark it expire before booking new )
           if(statusTest.expiresAt < new Date()){
        // mark it expiry first 
@@ -54,23 +50,30 @@ console.log("Is expired:", statusTest.expiresAt < new Date());
       const distance  = Math.abs(toStation.distance - fromStation.distance);
 
       // fare Calculation 
-      const basefare = 10 ; 
-      const fareperKm = 2 ; 
+      const basefare = 90 ; 
+      const fareperKm = 20 ; 
  let fare = basefare + distance * fareperKm;
 
  if(journeyType === "return"){
   fare = fare  * 2 ; 
  }
 
- // qrCode Data 
- const qrCode  = `USER:${userId}|FROM:${from}|TO:${to}|FARE:${fare}|TIME:${Date.now()}`;
+//  // qrCode Data - will be set after ticket creation with ticket ID
  // save ticket 
 
  const ticket = await TicketModel.create({
   user : userId , 
   from , to , journeyType ,distance,
-  qrCode , fare , expiresAt
+  fare , expiresAt,
+  qrCode: `TICKET_ID:TEMP_${Date.now()}` // temporary value, will be updated below
  })
+ // why we updated below ? 
+ // because we need a valid id for passing into the scanner and for ticket we use temporary value so in this way the variable
+ // ticket contains whole details of ticket 
+// generate qr using ticket id 
+ ticket.qrCode = `TICKET_ID:${ticket._id}`
+
+ await ticket.save();
  // saved successfully  
  return res.status(201).json({message : "Ticket booked successfully " , ticket});
   } catch (error) {

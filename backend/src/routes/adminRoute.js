@@ -5,7 +5,7 @@ import User from '../models/UserModel.js'
 //  our fronted is also unknown from it . only developer tells the owner this secret. 
 const router = express.Router();
 
-router.post("/promote",authMiddleware, async(req,res) =>{
+router.post("/admin",authMiddleware, async(req,res) =>{
 
     const {secret} =  req.body;
     if(secret !== process.env.ADMIN_SECRET){
