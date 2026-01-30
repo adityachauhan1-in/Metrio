@@ -9,7 +9,7 @@ router.post("/admin",authMiddleware, async(req,res) =>{
 
     const {secret} =  req.body;
     if(secret !== process.env.ADMIN_SECRET){
-     return res.status(403),json({message : "Invalid Admin Secret"})
+     return res.status(403).json({message : "Invalid Admin Secret"})
     }
 
     // secret is matched so now update the role 

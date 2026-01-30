@@ -7,7 +7,7 @@ try {
     const fromStation = await StationModel.findOne({name : from})
     const toStation = await StationModel.findOne({name : to})
 
-    if(!(fromStation || toStation)){
+    if(!fromStation || !toStation){
          return res.status(400).json({message : "Invalid Coupon "})
     }
     const distance = Math.abs(toStation.distance - fromStation.distance);

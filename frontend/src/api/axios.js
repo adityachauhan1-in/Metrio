@@ -1,7 +1,7 @@
 // backend connect with the frontend 
 import axios from 'axios';
-const api = axios.create //Creates a custom axios client
-({
+// Creates a custom axios client
+const api = axios.create({
     baseURL:"http://localhost:5000",
     headers:{
         "Content-Type":"application/json",
