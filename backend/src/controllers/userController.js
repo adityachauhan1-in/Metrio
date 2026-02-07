@@ -63,13 +63,18 @@ export const login = async(req,res) => {
     }
     // Generate JsonWebToken
     const token = jwt.sign(
-        {id : user._id, role : user.role},
-        process.env.JWT_SECRET , 
-        {expiresIn : "1h"}
-    )
+        { id: user._id, role: user.role, name: user.name },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+    );
 
-    // now return token only we did not return anything else
-    res.json({token})
+    const userPayload = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+    };
+    res.json({ token, user: userPayload });
 } 
 catch (error) { 
 return res.status(500).json({error : error.message})    

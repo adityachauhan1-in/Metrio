@@ -56,7 +56,7 @@ export default function Login() {
             <div className="auth-card">
                 <h1 className="auth-title">Log in</h1>
                 <p className="auth-subtitle">
-                    {fromSignup ? "Account created. Sign in to continue." : "Sign in to your Metrio account"}
+                    {fromSignup ? "Account created. Sign in to continue." : "Sign in to your MetroFlow account"}
                 </p>
 
                 {error && (

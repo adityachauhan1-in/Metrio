@@ -5,9 +5,13 @@ import { Card, CardContent } from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import { scanTicket } from "../api/services";
-import { QrCode, User, CheckCircle2, XCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { QrCode, CheckCircle2, XCircle, MessageSquare, MapPin, IndianRupee } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [ticketId, setTicketId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,11 +50,13 @@ export default function AdminDashboard() {
       <div className="space-y-6">
         <Card>
           <CardContent className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
-              <User className="h-6 w-6 text-slate-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-lg font-semibold text-white">
+              {user?.name ? String(user.name).trim().charAt(0).toUpperCase() : "A"}
             </div>
             <div>
-              <p className="text-lg font-medium text-slate-900">Admin</p>
+              <p className="text-lg font-medium text-slate-900">
+                Hello, {user?.name || "Admin"}
+              </p>
               <p className="text-sm text-slate-500">Scan tickets at the gate</p>
             </div>
           </CardContent>
@@ -118,6 +124,53 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         )}
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100">
+                <MessageSquare className="h-5 w-5 text-amber-600" />
+              </div>
+              <h2 className="mb-2 text-lg font-semibold">Feedback</h2>
+              <p className="mb-4 text-sm text-slate-500">
+                Review and respond to user feedback.
+              </p>
+              <Button variant="outline" onClick={() => navigate("/admin/feedback")}>
+                Review feedback
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+                <MapPin className="h-5 w-5 text-blue-600" />
+              </div>
+              <h2 className="mb-2 text-lg font-semibold">Stations</h2>
+              <p className="mb-4 text-sm text-slate-500">
+                Add or edit stations and distances.
+              </p>
+              <Button variant="outline" onClick={() => navigate("/admin/stations")}>
+                Manage stations
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+                <IndianRupee className="h-5 w-5 text-emerald-600" />
+              </div>
+              <h2 className="mb-2 text-lg font-semibold">Fare configuration</h2>
+              <p className="mb-4 text-sm text-slate-500">
+                Set base fare, per km rate, and peak hours.
+              </p>
+              <Button variant="outline" onClick={() => navigate("/admin/fare-config")}>
+                Fare settings
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </DashboardLayout>
   );

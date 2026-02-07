@@ -49,7 +49,7 @@ export default function SignUp() {
         <div className="auth-page">
             <div className="auth-card">
                 <h1 className="auth-title">Create account</h1>
-                <p className="auth-subtitle">Join Metrio to get started</p>
+                <p className="auth-subtitle">Join MetroFlow to get started</p>
 
                 {error && (
                     <div className="auth-error" role="alert">

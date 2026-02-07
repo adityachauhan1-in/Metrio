@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 
 import { Card, CardContent } from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import DashboardLayout from "../components/layout/DashboardLayout";
-import { STATIONS } from "../constants/stations";
-import { calculateFare, bookTicket } from "../api/services";
+import { bookTicket, getStations } from "../api/services";
 import { QRCodeSVG } from "qrcode.react";
 
 const JOURNEY_TYPES = [
@@ -14,40 +13,21 @@ const JOURNEY_TYPES = [
 ];
 
 export default function BookTicket() {
+  const [stations, setStations] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [journeyType, setJourneyType] = useState("single");
-  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [booked, setBooked] = useState(null);
 
-  const clearError = () => setError("");
+  useEffect(() => {
+    getStations()
+      .then((res) => setStations(res?.data ?? []))
+      .catch(() => setStations([]));
+  }, []);
 
-  const handleCalculateFare = async (e) => {
-    e?.preventDefault();
-    setError("");
-    setPreview(null);
-    if (!from || !to) {
-      setError("Select From and To stations.");
-      return;
-    }
-    if (from === to) {
-      setError("From and To cannot be the same.");
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await calculateFare({ from, to });
-      let fare = res.fare ?? 0;
-      if (journeyType === "return") fare *= 2;
-      setPreview({ distance: res.distance, fare, journeyType });
-    } catch (err) {
-      setError(err.response?.data?.message ?? "Could not calculate fare.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const clearError = () => setError("");
 
   const handleBook = async (e) => {
     e?.preventDefault();
@@ -107,8 +87,8 @@ export default function BookTicket() {
                       className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       <option value="">Select station</option>
-                      {STATIONS.map((s) => (
-                        <option key={s.name} value={s.name}>
+                      {stations.map((s) => (
+                        <option key={s.name ?? s._id} value={s.name}>
                           {s.name}
                         </option>
                       ))}
@@ -124,7 +104,7 @@ export default function BookTicket() {
                       className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
                       <option value="">Select station</option>
-                      {STATIONS.map((s) => (
+                      {stations.map((s) => (
                         <option key={s.name} value={s.name}>
                           {s.name}
                         </option>
@@ -151,14 +131,7 @@ export default function BookTicket() {
                       ))}
                     </div>
                   </div>
-                  <div className="flex gap-3 sm:col-span-2">
-                    <Button
-                      variant="outline"
-                      onClick={handleCalculateFare}
-                      disabled={loading}
-                    >
-                      {loading ? "Calculating…" : "Preview fare"}
-                    </Button>
+                  <div className="sm:col-span-2">
                     <Button onClick={handleBook} disabled={loading}>
                       {loading ? "Booking…" : "Book ticket"}
                     </Button>
@@ -166,21 +139,6 @@ export default function BookTicket() {
                 </form>
               </CardContent>
             </Card>
-
-            {preview && (
-              <Card>
-                <CardContent>
-                  <h3 className="mb-2 font-semibold">Fare preview</h3>
-                  <p className="text-slate-600">
-                    Distance: {preview.distance} km • Type: {preview.journeyType} •
-                    Fare: ₹{preview.fare}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Final fare may vary; see booking confirmation.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
           </>
         ) : (
           <Card>
@@ -220,7 +178,6 @@ export default function BookTicket() {
                   setFrom("");
                   setTo("");
                   setJourneyType("single");
-                  setPreview(null);
                 }}
               >
                 Book another

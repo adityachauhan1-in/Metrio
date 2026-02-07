@@ -33,17 +33,16 @@ export const AuthProvider = ({children}) => {
 
         if (storedToken && isTokenValid(storedToken)) {
             try {
-                // Decode token to get user info
                 const decoded = jwtDecode(storedToken);
+                const parsedUser = storedUser ? JSON.parse(storedUser) : null;
                 const user = {
                     id: decoded.id,
-                    role: decoded.role
+                    role: decoded.role,
+                    name: decoded.name ?? parsedUser?.name ?? (decoded.role === "admin" ? "Admin" : "User"),
+                    email: parsedUser?.email ?? null,
                 };
-                
                 setToken(storedToken);
                 setUser(user);
-                
-                // Update localStorage with decoded user info
                 localStorage.setItem("user", JSON.stringify(user));
             } catch (error) {
                 // Invalid token or JSON, clear it
@@ -73,29 +72,26 @@ export const AuthProvider = ({children}) => {
                 password
             });
             
-            const { token } = res.data;
-            
+            const { token, user: resUser } = res.data;
+
             if (!token) {
                 throw new Error("No token received from server");
             }
 
-            // Decode token to extract user info
             const decoded = jwtDecode(token);
             const user = {
                 id: decoded.id,
-                role: decoded.role
+                role: decoded.role,
+                name: resUser?.name ?? decoded.name ?? (decoded.role === "admin" ? "Admin" : "User"),
+                email: resUser?.email ?? null,
             };
 
             setToken(token);
             setUser(user);
-            
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
-            
-            return { 
-                success: true, 
-                user 
-            };
+
+            return { success: true, user };
         } catch (error) {
             console.error("Login failed:", error);
             return { success: false, error: error.response?.data?.message || "Login failed" };

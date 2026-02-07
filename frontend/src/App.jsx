@@ -7,7 +7,12 @@ import SignUp from "./pages/Signup";
 import UserDashboard from "./pages/UserDashboard";
 import BookTicket from "./pages/BookTicket";
 import TicketHistory from "./pages/TicketHistory";
+import UserFeedback from "./pages/UserFeedback";
+import PreviewFare from "./pages/PreviewFare";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminFeedback from "./pages/AdminFeedback";
+import AdminStations from "./pages/AdminStations";
+import AdminFareConfig from "./pages/AdminFareConfig";
 import NotFound from "./pages/NotFound";
 
 export const App = () => {
@@ -42,6 +47,22 @@ export const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user/feedback"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <UserFeedback />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/preview-fare"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <PreviewFare />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/admin"
@@ -51,7 +72,31 @@ export const App = () => {
             </ProtectedRoute>
           }
         />
-{/* for any type of error */}
+        <Route
+          path="/admin/feedback"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminFeedback />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/stations"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminStations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/fare-config"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminFareConfig />
+            </ProtectedRoute>
+          }
+        />
+        {/* for any type of error */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

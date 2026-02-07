@@ -12,7 +12,9 @@ import cron from 'cron'
 import { autoExpireTicket } from "./utils/ticketCleanup.js";
 // import { getMyTicket } from "./controllers/tickHistoryController.js";
 // import authMiddleware from "./middlewares/authMiddleware.js";
-import qrScanRoute from "./routes/qrScanRoute.js"
+import qrScanRoute from "./routes/qrScanRoute.js";
+import userFeedbackRoute from "./routes/userFeedbackRoute.js";
+import adminFeedbackRoute from "./routes/adminFeedbackRoute.js";
 dotenv.config();
 
 const app = express();
@@ -42,12 +44,14 @@ autoExpireTicket();
 
  app.use("/calculate",fareRoute);
  app.use("/",protectedRoute); 
-app.use("/ticket",ticketRoute);
-app.use("/user",userRoutes);
+app.use("/ticket", ticketRoute);
+app.use("/user", userRoutes);
+app.use("/user", userFeedbackRoute);
 app.use("/role",adminRoute);
 // app.use("/api/getmy/history",authMiddleware,getMyTicket)
-app.use("/admin",qrScanRoute);
-app.use("/admin",adminConfigRoute);
+app.use("/admin", qrScanRoute);
+app.use("/admin", adminConfigRoute);
+app.use("/admin", adminFeedbackRoute);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
