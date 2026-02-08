@@ -1,21 +1,19 @@
 import express from "express";
 import dotenv from "dotenv"
 import mongoose from "mongoose"
-import cors from "cors";
+import cors from "cors";// cross origin resource sharing used for share the data b/w two different links(backend and frontendh)
 import fareRoute from '../src/routes/fareRoute.js'
 import protectedRoute from './routes/protectedRoute.js'
 import ticketRoute from './routes/ticketRoute.js'
 import userRoutes from './routes/userRoutes.js'
 import adminRoute from './routes/adminRoute.js'
 import adminConfigRoute from './routes/adminConfigRoute.js'
-import cron from 'cron'
 import { autoExpireTicket } from "./utils/ticketCleanup.js";
-// import { getMyTicket } from "./controllers/tickHistoryController.js";
-// import authMiddleware from "./middlewares/authMiddleware.js";
+
 import qrScanRoute from "./routes/qrScanRoute.js";
 import userFeedbackRoute from "./routes/userFeedbackRoute.js";
 import adminFeedbackRoute from "./routes/adminFeedbackRoute.js";
-dotenv.config();
+dotenv.config();//mongodb connection 
 
 const app = express();
 app.use(cors())
@@ -30,9 +28,9 @@ mongoose
 app.get("/" , (req,res) => {
     res.send("Meerut Metro API  is running ,  Alright  ")
 })
-
-// Schedule cleanup every 5 minutes using setInterval
-const CLEANUP_INTERVAL = 5 * 60 * 1000; 
+// after every 10 minute ticket is check Active or mark it expire if time gone . and not used 
+// Schedule cleanup every 10 minutes using setInterval
+const CLEANUP_INTERVAL = 10 * 60 * 1000; 
 setInterval(() => {
   console.log('Running ticket cleanup job...');
   autoExpireTicket();
@@ -43,12 +41,11 @@ console.log('Running initial ticket cleanup...');
 autoExpireTicket();
 
  app.use("/calculate",fareRoute);
- app.use("/",protectedRoute); 
+ app.use("/",protectedRoute); // gatekeeper 
 app.use("/ticket", ticketRoute);
 app.use("/user", userRoutes);
 app.use("/user", userFeedbackRoute);
 app.use("/role",adminRoute);
-// app.use("/api/getmy/history",authMiddleware,getMyTicket)
 app.use("/admin", qrScanRoute);
 app.use("/admin", adminConfigRoute);
 app.use("/admin", adminFeedbackRoute);

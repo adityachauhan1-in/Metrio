@@ -1,7 +1,7 @@
 import express from 'express';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import User from '../models/UserModel.js'
-// it works only for the login user if the user give corrct secret but it is stroed in env so 
+// it works only for the login user if the user give corrct secret and it is stroed in env so 
 //  our fronted is also unknown from it . only developer tells the owner this secret. 
 const router = express.Router();
 

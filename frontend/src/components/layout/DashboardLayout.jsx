@@ -4,7 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 import Button from "../ui/Button";
 import { LogOut, ArrowLeft, ChevronDown, User } from "lucide-react";
 import React from "react";
-
 function Avatar({ name }) {
   const initial = name ? String(name).trim().charAt(0).toUpperCase() : "?";
   const showIcon = !initial || initial === "?";
@@ -18,7 +17,7 @@ function Avatar({ name }) {
   );
 }
 
-export default function DashboardLayout({ children, title, backHref, backLabel = "Dashboard" }) {
+ export default function DashboardLayout({ children, title, backHref, backLabel = "Dashboard" }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
@@ -39,10 +38,10 @@ export default function DashboardLayout({ children, title, backHref, backLabel =
             {backHref && (
               <button
                 type="button"
-                onClick={() => navigate(backHref)}
+              onClick={() => navigate(backHref)}
                 className="metro-dashboard-back"
               >
-                <ArrowLeft size={18} strokeWidth={2.5} className="shrink-0 text-white" /> {backLabel}
+               <ArrowLeft size={18} strokeWidth={2.5} className="shrink-0 text-white" /> {backLabel}
               </button>
             )}
             <h1 className="text-xl font-bold text-white">
@@ -73,16 +72,16 @@ export default function DashboardLayout({ children, title, backHref, backLabel =
                 <div className="metro-dashboard-dropdown">
                   <div className="border-b border-slate-100 px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <Avatar name={displayName} />
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
-                        {user?.email && (
-                          <p className="truncate text-xs text-slate-500">{user.email}</p>
-                        )}
-                        <p className="text-xs font-semibold capitalize text-metro-dark">{roleLabel}</p>
-                      </div>
-                    </div>
-                  </div>
+          <Avatar name={displayName} />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
+            {user?.email && (
+              <p className="truncate text-xs text-slate-500">{user.email}</p>
+            )}
+            <p className="text-xs font-semibold capitalize text-metro-dark">{roleLabel}</p>
+          </div>
+        </div>
+      </div>
                   <div className="px-2 py-1">
                     <Button
                       variant="outline"

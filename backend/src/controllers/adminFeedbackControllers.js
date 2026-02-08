@@ -3,7 +3,7 @@ import FeedBackModel from "../models/FeedBackModel.js";
 export const getAllFeedback = async (req, res) => {
   try {
     const feedbacks = await FeedBackModel.find()
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 }) //LIFO -> last uploaded feedback appear at the top .  
       .populate("user", "name email");
     return res.status(200).json({ success: true, data: feedbacks });
   } catch (error) {
@@ -16,7 +16,7 @@ export const getAllFeedback = async (req, res) => {
 
 export const reviewFeedback = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;// admin Id 
     const { status, adminReply } = req.body;
 
     const updates = {};
@@ -24,7 +24,7 @@ export const reviewFeedback = async (req, res) => {
       if (!["open", "resolved", "reviewed"].includes(status)) {
         return res.status(400).json({ message: "Invalid status" });
       }
-      updates.status = status;
+      updates.status = status;// admin updates the status
     }
     if (adminReply !== undefined) updates.adminReply = adminReply;
 

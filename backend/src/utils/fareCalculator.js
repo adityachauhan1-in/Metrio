@@ -1,6 +1,8 @@
 import FareConfigModel from "../models/FareConfigModel.js";
 
 export const multiFare = async (fromStation, toStation, journeyType ) => {
+  // if admin fare config fails so these values are handle so our project and user interaction will not break until the 
+  // it is not fixed.. 
     let baseFare = 90;
     let perKmFare = 20;
     let peakMultiplier = 1;

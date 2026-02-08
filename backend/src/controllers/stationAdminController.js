@@ -4,12 +4,16 @@ import StationModel from "../models/StationModel.js";
 export const listStations = async (req, res) => {
   try {
     const stations = await StationModel.find().sort({ distance: 1 });
-    return res.status(200).json({ success: true, data: stations });
+    return res.status(200).json({ 
+      success: true,
+       data: stations });
   } catch (error) {
     console.error("List stations error:", error);
     return res
       .status(500)
-      .json({ message: "Error fetching stations", error: error.message });
+      .json({ 
+        message: "Error fetching stations",
+         error: error.message });
   }
 };
         
@@ -18,7 +22,7 @@ export const createStation = async (req, res) => {
   try {
     const { name, distance } = req.body;
 
-    if (!name || distance === undefined) {
+    if (!name || !distance === undefined) {
       return res
         .status(400)
         .json({ message: "Name and distance are required" });
@@ -32,7 +36,10 @@ export const createStation = async (req, res) => {
     }
 
     const station = await StationModel.create({ name, distance });
-    return res.status(201).json({ success: true, data: station });
+
+    return res.status(201).json({ 
+      success: true,
+       data: station });
   } catch (error) {
     console.error("Create station error:", error);
     return res
@@ -47,7 +54,7 @@ export const updateStation = async (req, res) => {
     const { id } = req.params;
     const { name, distance } = req.body;
 
-    const updates = {};
+    const updates = {};// initially keep it blank bcz we don't know what to update?
     if (name !== undefined) updates.name = name;
     if (distance !== undefined) updates.distance = distance;
 

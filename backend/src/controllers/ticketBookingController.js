@@ -47,7 +47,7 @@ export const ticketBooking = async(req,res) => {
  
       // Use Resusable funtion (calculateFare)
        const fareDetails =  await multiFare(fromStation,toStation,journeyType)
-  // set Expiry time of the ticket
+  // set Expiry time of the ticket(90 minute)
   const expiresAt  = new Date(Date.now() + 90 * 60 * 1000);
 
 // Save ticket with temporary QR code

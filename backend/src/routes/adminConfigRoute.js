@@ -1,6 +1,8 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
+// we  need both because adminMiddleware check --> is the person really the Admin (role check by adminMiddleware)
+// and authMiddleware check is the person loggin or not (and for any work the person should be logged in ) so we use both . 
 import {
   setFareConfig,
   getActiveFareConfig,
@@ -27,6 +29,7 @@ router.post("/stations", createStation);
 router.put("/stations/:id", updateStation);
 
 // Dashboard stats
+// we didn't use this (for future  version )
 router.get("/dashboard/tickets", getTicketStats);
 
 export default router;

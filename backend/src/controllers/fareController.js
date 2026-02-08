@@ -1,6 +1,6 @@
 import StationModel from "../models/StationModel.js"
 import { multiFare } from "../utils/fareCalculator.js";
-// for calculation of the fare . 
+// for preview of the fare . 
 export const calculateFare = async(req,res) => {
 try {
     const {from , to , journeyType } = req.body ; 
