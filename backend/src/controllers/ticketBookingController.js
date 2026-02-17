@@ -47,76 +47,75 @@ export const ticketBooking = async(req,res) => {
         return res.status(400).json({message : "Invalid Station Selected"})
       }
  
-      // Use Resusable funtion (calculateFare)
-       const fareDetails =  await multiFare(fromStation,toStation,journeyType)
-  // set Expiry time of the ticket(90 minute)
-  const expiresAt  = new Date(Date.now() + 90 * 60 * 1000);
-  // For emailing the user
-  console.log("Here is the Email error occur")
+      // Use reusable function (calculateFare)
+      const fareDetails = await multiFare(fromStation, toStation, journeyType);
 
-  const userDoc  = await UserModel.findById(req.user.id).select("email");
-  if (!userDoc || !userDoc.email) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  // Send email using the user's email from DB
-  await sendEmail(userDoc.email, {
-    from,
-    to,
-    fare: fareDetails.total,
-  });
+      // Set expiry time of the ticket (90 minutes)
+      const expiresAt = new Date(Date.now() + 90 * 60 * 1000);
 
-// Save ticket with temporary QR code
-const ticket = await TicketModel.create({
-  user: userId,
-  from: fromStation.name,
-  to: toStation.name,
-  journeyType,
-  distance: fareDetails.distance,
-  fare: fareDetails.total,
-  expiresAt,
-  qrCode: `TICKET_ID:TEMP_${Date.now()}`,
-  fareDetails: {
-    baseFare: fareDetails.baseFare,
-    perKmFare: fareDetails.perKmFare,
-    peakMultiplier: fareDetails.peakMultiplier,
-    isPeakTime: fareDetails.isPeakTime
-  }
-});
+      // Save ticket with temporary QR code
+      const ticket = await TicketModel.create({
+        user: userId,
+        from: fromStation.name,
+        to: toStation.name,
+        journeyType,
+        distance: fareDetails.distance,
+        fare: fareDetails.total,
+        expiresAt,
+        qrCode: `TICKET_ID:TEMP_${Date.now()}`,
+        fareDetails: {
+          baseFare: fareDetails.baseFare,
+          perKmFare: fareDetails.perKmFare,
+          peakMultiplier: fareDetails.peakMultiplier,
+          isPeakTime: fareDetails.isPeakTime,
+        },
+      });
 
-// Update QR code with actual ticket ID
-ticket.qrCode = `TICKET_ID:${ticket._id}`;
-await ticket.save();
+      // Update QR code with actual ticket ID
+      ticket.qrCode = `TICKET_ID:${ticket._id}`;
+      await ticket.save();
+      // For emailing the user
+      const userDoc = await UserModel.findById(req.user.id).select("email");
+      if (!userDoc || !userDoc.email) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-// Return success response
-return res.status(201).json({
-  success: true,
-  message: "Ticket booked successfully",
-  ticket: {
-    id: ticket._id,
-    from: ticket.from,
-    to: ticket.to,
-    journeyType: ticket.journeyType,
-    distance: ticket.distance,
-    fare: ticket.fare,
-    expiresAt: ticket.expiresAt,
-    qrCode: ticket.qrCode,
-    status: ticket.status
-  },
-  fareBreakdown: {
-    baseFare: fareDetails.baseFare,
-    perKmFare: fareDetails.perKmFare,
-    distance: fareDetails.distance,
-    peakMultiplier: fareDetails.peakMultiplier,
-    subtotal: fareDetails.subtotal,
-    total: fareDetails.total,
-    isPeakTime: fareDetails.isPeakTime
-  }
-});
-// for email to the user 
+      // Send email using the user's email from DB
+      await sendEmail(userDoc.email, {
+        from: ticket.from,
+        to: ticket.to,
+        fare: ticket.fare,
+        ticketId : ticket.qrCode,
+        expiresAt : ticket.expiresAt
+      });
 
-  }
+      // Return success response
+      return res.status(201).json({
+        success: true,
+        message: "Ticket booked successfully",
+        ticket: {
+          id: ticket._id,
+          from: ticket.from,
+          to: ticket.to,
+          journeyType: ticket.journeyType,
+          distance: ticket.distance,
+          fare: ticket.fare,
+          expiresAt: ticket.expiresAt,
+          qrCode: ticket.qrCode,
+          status: ticket.status,
+        },
+        fareBreakdown: {
+          baseFare: fareDetails.baseFare,
+          perKmFare: fareDetails.perKmFare,
+          distance: fareDetails.distance,
+          peakMultiplier: fareDetails.peakMultiplier,
+          subtotal: fareDetails.subtotal,
+          total: fareDetails.total,
+          isPeakTime: fareDetails.isPeakTime,
+        },
+      });
 
- catch (error) {
+  } catch (error) {
     console.error('Ticket booking error:', error);
     return res.status(500).json({ 
       success: false,
