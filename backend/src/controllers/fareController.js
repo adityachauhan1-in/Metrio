@@ -1,6 +1,7 @@
 import StationModel from "../models/StationModel.js"
 import { multiFare } from "../utils/fareCalculator.js";
-// for preview of the fare . 
+// for calculating the fare . 
+
 export const calculateFare = async(req,res) => {
 try {
     const {from , to , journeyType } = req.body ; 
@@ -15,7 +16,8 @@ try {
      if(from === to){
         return res.status(400).json({message : "From and To stations cannot be same "});
       }
-// Calculate fare using the resuable function
+
+// for preview of the fare . 
 
 const fareDetails = await multiFare(fromStation , toStation , journeyType)  
 //  Return the details of preview Fare     

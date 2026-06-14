@@ -1,5 +1,4 @@
 import mongoose  from "mongoose";
-
 const fareConfigSchema = new mongoose.Schema({
    baseFare : {
     type : Number,
@@ -42,8 +41,8 @@ const fareConfigSchema = new mongoose.Schema({
     type: Boolean,
     default : true
    }
-
-
+   
+   
 },
 {
     timestamps : true
@@ -62,8 +61,8 @@ fareConfigSchema.pre('save', function(next) {
     }
     if (this.peakEndTime) {
       this.peakEndTime = formatTime(this.peakEndTime);
-    }
-    
+    }           
     next();
-})
+} 
+)
 export default mongoose.model("FareConfig" , fareConfigSchema)

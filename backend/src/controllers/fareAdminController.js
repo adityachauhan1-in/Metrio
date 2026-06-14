@@ -26,7 +26,7 @@ export const setFareConfig = async (req, res) => {
     if (isActive) {
       await FareConfigModel.updateMany({ isActive: true }, { isActive: false });
     }
-
+// above Admin type the data and here we saved it in our database . 
     const fareConfig = await FareConfigModel.create({
       baseFare,
       perKmFare,
@@ -56,7 +56,7 @@ export const getActiveFareConfig = async (req, res) => {
     const activeConfig = await FareConfigModel.findOne({ isActive: true }).sort(
       { createdAt: -1 }// latest appear at the top 
     );
-
+   
     if (!activeConfig) {
       return res
         .status(404)

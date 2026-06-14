@@ -16,8 +16,7 @@ export const ticketBooking = async(req,res) => {
           user : userId,
           status : "active"
         })
-        if(statusTest){
-        
+        if(statusTest){      
           // if active ticket exist , check expiry (if it is expire so we mark it expire before booking new )
           if(statusTest.expiresAt < new Date()){
        // mark it expiry first 
@@ -52,6 +51,8 @@ export const ticketBooking = async(req,res) => {
 
       // Set expiry time of the ticket (90 minutes)
       const expiresAt = new Date(Date.now() + 90 * 60 * 1000);
+// Why 90 minutes -> Check explanation file  
+  
 
       // Save ticket with temporary QR code
       const ticket = await TicketModel.create({
@@ -63,7 +64,6 @@ export const ticketBooking = async(req,res) => {
         fare: fareDetails.total,
         expiresAt,
         qrCode: `TICKET_ID:TEMP_${Date.now()}`,
-        // qrCode: `${Date.now()}`,
         fareDetails: {
           baseFare: fareDetails.baseFare,
           perKmFare: fareDetails.perKmFare,

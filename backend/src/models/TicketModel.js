@@ -1,5 +1,5 @@
 // for booking the ticket user need to login 
-import mongoose, { trusted }  from "mongoose";
+import mongoose   from "mongoose";
 
 const ticketSchema = new mongoose.Schema(  {
    
@@ -54,3 +54,4 @@ usedAt : {
 {timestamps:true},
   )
   export default mongoose.model("Ticket",ticketSchema);
+     

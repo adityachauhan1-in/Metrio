@@ -11,6 +11,7 @@ export const getTicketStats = async (req, res) => {
       revenueResult,
       todayTickets,
     ] = await Promise.all([ // for counting  of all the documents 
+      //   we do aggregate them . 
       TicketModel.countDocuments(),
       TicketModel.countDocuments({ status: "active" }),
       TicketModel.countDocuments({ status: "used" }),
@@ -25,7 +26,7 @@ export const getTicketStats = async (req, res) => {
         return TicketModel.countDocuments({ createdAt: { $gte: startOfToday } });
       })(),
     ]);
-
+    
     const totalRevenue =
       revenueResult && revenueResult.length > 0
         ? revenueResult[0].totalRevenue

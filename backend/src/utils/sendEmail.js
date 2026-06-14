@@ -1,19 +1,6 @@
 import nodemailer from "nodemailer";
-
+ // For clear understanding look at the Explanation file 
 export const sendEmail = async (userEmail, ticketData) => {
-  
-  // console.log("[sendEmail] called with:", {
-  //   userEmail,
-  //   from: ticketData.from,
-  //   to: ticketData.to,
-  //   fare: ticketData.fare,
-  //   ticket : ticketData.ticketId,
-  //   expire : ticketData.expiresAt
-  // });
-
-  // console.log("[sendEmail] env EMAIL_USER present:", !!process.env.EMAIL_USER);
-  // console.log("[sendEmail] env EMAIL_PASSWORD present:", !!process.env.EMAIL_PASSWORD);
-
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -22,7 +9,7 @@ export const sendEmail = async (userEmail, ticketData) => {
         pass: process.env.EMAIL_PASSWORD, // must be App Password if 2FA on
       },
       logger: true, // nodemailer logs to console
-      debug: true,  // detailed SMTP logs
+      debug: true,  // detailed SMTP logs SMTP -> Simple Mail Transfer Protocol (which help to send email )
     });
 
     // Check connection before sending

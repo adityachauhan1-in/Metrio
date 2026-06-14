@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 
 const feedBackSchema = mongoose.Schema({
     user : {
+        // store the user Id from the database. 
         type: mongoose.Schema.Types.ObjectId,
         ref : 'User',
         required : true,
 
     },
     message : {
-        type : String ,
+     type : String ,
         required : true,
         minlength : 5 ,
         maxlength : 1000
@@ -26,10 +27,10 @@ const feedBackSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["open", "resolved", "reviewed"],
+      enum: ["open", "resolved", "reviewed"],
         default: "open"
     }
-},
+},  
 {timestamps : true}
 )
 export default mongoose.model("Feedback",feedBackSchema)

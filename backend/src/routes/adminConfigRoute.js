@@ -1,13 +1,11 @@
 import express from "express";
-import authMiddleware from "../middlewares/authMiddleware.js";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
-// we  need both because adminMiddleware check --> is the person really the Admin (role check by adminMiddleware)
-// and authMiddleware check is the person loggin or not (and for any work the person should be logged in ) so we use both . 
+import authMiddleware from "../middlewares/authMiddleware.js";// for login check 
+import adminMiddleware from "../middlewares/adminMiddleware.js";// for Role should be Admin . 
 import {
   setFareConfig,
   getActiveFareConfig,
 } from "../controllers/fareAdminController.js";
-import {
+import { 
   listStations,
   createStation, 
   updateStation,

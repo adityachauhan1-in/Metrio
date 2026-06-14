@@ -1,7 +1,7 @@
 import FareConfigModel from "../models/FareConfigModel.js";
 
 export const multiFare = async (fromStation, toStation, journeyType ) => {
-  // if admin fare config fails so these values are handle so our project and user interaction will not break until the 
+  // if admin fare config fails so these values are handle so our project and user interaction will not break until
   // it is not fixed.. 
     let baseFare = 90;
     let perKmFare = 20;
@@ -21,9 +21,9 @@ export const multiFare = async (fromStation, toStation, journeyType ) => {
           const currentMinutes = currentTime.getMinutes();
           const currentTimeStr = `${currentHour.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`;
           
-          if (fareConfig.peakStartTime && fareConfig.peakEndTime &&
-              currentTimeStr >= fareConfig.peakStartTime && 
-              currentTimeStr <= fareConfig.peakEndTime) {
+     if (fareConfig.peakStartTime && fareConfig.peakEndTime && currentTimeStr >= 
+      fareConfig.peakStartTime &&  currentTimeStr <= 
+      fareConfig.peakEndTime) {
             peakMultiplier = fareConfig.peakMultiplier;
           }
         }
