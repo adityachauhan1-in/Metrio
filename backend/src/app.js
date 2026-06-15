@@ -1,7 +1,7 @@
-import express from "express";
-import dotenv from "dotenv"
+import express from "express";  
+import dotenv from "dotenv"// to access the enviroment variables 
 import mongoose from "mongoose"
-import cors from "cors";// cross origin resource sharing used for share the data b/w two different links(backend and frontendh)
+import cors from "cors";// cross origin resource sharing used for share the data b/w two different origins(backend and frontendh)
 import fareRoute from '../src/routes/fareRoute.js'
 import protectedRoute from './routes/protectedRoute.js'
 import ticketRoute from './routes/ticketRoute.js'
@@ -9,12 +9,11 @@ import userRoutes from './routes/userRoutes.js'
 import adminRoute from './routes/adminRoute.js'
 import adminConfigRoute from './routes/adminConfigRoute.js'
 import { autoExpireTicket } from "./utils/ticketCleanup.js";
-
 import qrScanRoute from "./routes/qrScanRoute.js";
 import userFeedbackRoute from "./routes/userFeedbackRoute.js";
 import adminFeedbackRoute from "./routes/adminFeedbackRoute.js";
-dotenv.config();//mongodb connection 
 
+dotenv.config();//mongodb connection 
 const app = express();
 app.use(cors())
 app.use(express.json()) 
