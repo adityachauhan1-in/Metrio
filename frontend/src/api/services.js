@@ -1,12 +1,14 @@
-/** All backend Url are here
+ /** All backend Url are here
  * Frontend API helpers aligned with backend routes.
  * Base URL and auth via axios instance (api) in axios.js.
  */
+// We use async await here because it fetches the data from the backend which takes time so
+//  to keep the user interface responsive  . it helps . 
 import api from "./axios";
 
 // ----- Ticket (ticketRoute) -----
 export async function bookTicket(body) {
-  const { data } = await api.post("/ticket/book", body);
+  const { data } = await api.post("/ticket/book", body); // Not idempotent
   return data;
 }
 
