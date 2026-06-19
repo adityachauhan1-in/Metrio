@@ -456,3 +456,25 @@ reaches the Node.js backend, and most of those requests require database operati
   independently of my computer."  (ab vo Render , Vercel , MongoDb jitna dete h free me use karega 
   isliye jab crowd jyada ho jayega vo crash kar jayega , tumahre se to vo independent h )
   (isliye hame paid lene padte h taki vo jyada resources provide kare )
+
+  🔴🔴16  What I use for frontend - cra / vite 
+  so i Vite becasuse vite is new version as well as vite gives more scalability and functionality
+  as compare to the older version which I mean Create React App 
+
+  🔴🔴17 Why we use utility folder 
+  Because instead of creating the same component and functionality at multiple places instead 
+  we keep them at  utility folder and then just use it . 
+
+  🔴🔴🔴18 UseCall Back Hook 
+  useCallback is used to memoize a function, meaning React will return the same function reference
+ between renders unless its dependencies change.
+
+ 🔴🔴🔴19 What is Lazy Loading ... 
+ Load something only when it is needed, instead of loading everything at the beginning.
+ Lazy Loading is a performance optimization technique in which components, modules, images, or
+  resources are loaded only when they are needed rather than during the initial application load.
+   It reduces bundle size, improves initial page load time, saves bandwidth, and provides a better
+   user experience. In React, lazy loading is commonly implemented using React.lazy() and Suspense.
+   Load resources only when needed.
+Reduces initial bundle size.
+Improves first page load speed.

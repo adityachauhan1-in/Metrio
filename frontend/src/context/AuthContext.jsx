@@ -25,11 +25,11 @@ export const AuthProvider = ({children}) => {
         } catch (error) {
             return false; // Invalid token
         }
-    }, []);
+    }, []); // it render  only once 
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        const storedUser = localStorage.getItem("user");
+     const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
 
         if (storedToken && isTokenValid(storedToken)) {
             try {

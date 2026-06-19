@@ -21,7 +21,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+      (async () => {
       try {
         const res = await getTicketStats();
         if (!cancelled && res?.success && res?.data) setTicketStats(res.data);

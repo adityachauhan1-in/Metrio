@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import LoadingScreen from "./components/ui/LoadingScreen";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/Signup"));
@@ -18,10 +17,10 @@ const AdminStations = lazy(() => import("./pages/AdminStations"));
 const AdminFareConfig = lazy(() => import("./pages/AdminFareConfig"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-export const App = () => {
+      export const App = () => {
   const { loading } = useAuth();
-
-  if (loading) return <LoadingScreen />;
+       
+ if (loading) return <LoadingScreen/>;
 
   return (
     <BrowserRouter>
@@ -38,7 +37,7 @@ export const App = () => {
                 <UserDashboard />
               </ProtectedRoute>
             }  
-          />
+   />
           <Route
             path="/user/book"
             element={
