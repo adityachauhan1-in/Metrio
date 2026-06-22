@@ -478,3 +478,13 @@ reaches the Node.js backend, and most of those requests require database operati
    Load resources only when needed.
 Reduces initial bundle size.
 Improves first page load speed.
+
+  🔴🔴🔴20 Race Condition 
+  "In the current version of the project, I perform validation and then save the ticket status,
+   so there is a possibility of a race condition if two admins scan the same ticket simultaneously. 
+   To make it production-ready, I would replace the separate read and write operations with an atomic
+   findOneAndUpdate query that updates the ticket only when its status is still active. That ensures
+   only one scan succeeds."
+"A race condition occurs when two or more concurrent operations access or modify shared data, and the
+ result depends on the order in which those operations execute. It can lead to inconsistent or 
+ incorrect data if proper synchronization or atomic operations are not used."
