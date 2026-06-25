@@ -488,3 +488,30 @@ Improves first page load speed.
 "A race condition occurs when two or more concurrent operations access or modify shared data, and the
  result depends on the order in which those operations execute. It can lead to inconsistent or 
  incorrect data if proper synchronization or atomic operations are not used."
+
+🔴🔴21 How do you ensure only one active ticket per user? 
+before ticket booking first i make a check TicketModel.findOne at userId and check that if status at that 
+userId is Active then we give an friendly response to user that You have already an active ticket 
+Either use it or wait for its expiration 
+
+🔴🔴22 Why did the app became slower after deployment
+"Actually, in my case I did not observe the application becoming slower after deployment.
+ I measured API response times and tested the deployed version. The response times were within 
+ the expected range. However, I understand that applications can become slower after deployment 
+ due to network latency, server resource constraints,
+ database performance issues, missing indexes, or increased traffic."
+
+ 🔴🔴🔴"What is the cold start problem?"
+"The cold start problem occurs when an application has been inactive and the hosting platform
+ puts it into a suspended state. When a new request arrives, the server must restart and
+  initialize resources before processing the request, causing higher latency for the first request. 
+This is common on serverless and free-tier cloud platforms."\
+
+If you deployed on platforms such as:
+Render
+Railway
+Koyeb
+
+"Why does the first API call sometimes take 20 seconds but later calls are fast?"
+"That is likely due to a cold start. The service was sleeping and needed to restart before handling
+ the request."
