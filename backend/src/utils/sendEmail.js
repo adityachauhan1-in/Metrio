@@ -20,7 +20,7 @@ console.log("I am at email service")
     });
 
     const mailOption = {
-      from: emailUser,
+      from: process.env.EMAIL_USER,
       to: userEmail,
       subject: "Your Metro Ticket",
       html: `
