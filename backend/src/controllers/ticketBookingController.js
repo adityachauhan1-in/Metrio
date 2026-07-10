@@ -7,6 +7,7 @@ import { sendEmail } from '../utils/sendEmail.js';
 export const ticketBooking = async(req,res) => {
   try {
       //  ===1 >> extract from , to and journeyType from the req.body 
+    
         const {from , to , journeyType} = req.body ; 
 
         const userId  = req.user.id;
@@ -16,6 +17,8 @@ export const ticketBooking = async(req,res) => {
           user : userId,
           status : "active"
         })
+
+
         if(statusTest){      
           // if active ticket exist , check expiry (if it is expire so we mark it expire before booking new )
           if(statusTest.expiresAt < new Date()){
@@ -28,14 +31,7 @@ export const ticketBooking = async(req,res) => {
         }
       }
     
-    // Validate Input 
-    if(!from || !to){
-      return res.status(400).json({message : "From and To stations are required "});
-    }
-      // if both are same 
-      if(from === to){
-        return res.status(400).json({message : "From and To stations cannot be same "});
-      }
+
 
       // Fetch Stations 
       const fromStation = await StationModel.findOne({name : from});
@@ -52,7 +48,6 @@ export const ticketBooking = async(req,res) => {
       // Set expiry time of the ticket (90 minutes)
       const expiresAt = new Date(Date.now() + 90 * 60 * 1000);
 // Why 90 minutes -> Check explanation file  
-  
 
       // Save ticket with temporary QR code
       const ticket = await TicketModel.create({
@@ -76,23 +71,8 @@ export const ticketBooking = async(req,res) => {
       // ticket.qrCode = `TICKET_ID:${ticket._id}`;
       ticket.qrCode = `${ticket._id}`;
       await ticket.save();
-      // For emailing the user
-      const userDoc = await UserModel.findById(req.user.id).select("email");
-      if (!userDoc || !userDoc.email) {
-        return res.status(404).json({ message: "User not found" });
-      }
 
-      // Send email using the user's email from DB
-      await sendEmail(userDoc.email, {
-        from: ticket.from,
-        to: ticket.to,
-        fare: ticket.fare,
-        ticketId : ticket.qrCode,
-        expiresAt : ticket.expiresAt
-      });
-
-      // Return success response
-      return res.status(201).json({
+      res.status(201).json({
         success: true,
         message: "Ticket booked successfully",
         ticket: {
@@ -116,6 +96,28 @@ export const ticketBooking = async(req,res) => {
           isPeakTime: fareDetails.isPeakTime,
         },
       });
+
+      // Do not await email — ticket is already saved; SMTP must not block the HTTP response.
+      UserModel.findById(userId)
+        .select("email")
+        .then((userDoc) => {
+          if (!userDoc?.email) {
+            console.warn("[ticketBooking] No email on file for user", userId);
+            return;
+          }
+          return sendEmail(userDoc.email, {
+            from: ticket.from,
+            to: ticket.to,
+            fare: ticket.fare,
+            ticketId: ticket.qrCode,
+            expiresAt: ticket.expiresAt,
+          });
+        })
+        .catch((err) => {
+          console.error("[ticketBooking] Confirmation email failed:", err.message);
+        });
+
+      return;
 
   } catch (error) {
     console.error('Ticket booking error:', error);

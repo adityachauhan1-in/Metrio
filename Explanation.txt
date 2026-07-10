@@ -515,3 +515,6 @@ Koyeb
 "Why does the first API call sometimes take 20 seconds but later calls are fast?"
 "That is likely due to a cold start. The service was sleeping and needed to restart before handling
  the request."
+
+  I make a check for station at frontend which means that if the stations are same or if any station are blank
+  so for this small duty why call backend return friendly message at frontend and I did as well .

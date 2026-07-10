@@ -35,7 +35,7 @@ export default function BookTicket() {
     setError("");
     setBooked(null);
     if (!from || !to) {
-      setError("Select From and To stations.");
+      setError("Select From or  To stations.");
       return;
     }
     if (from === to) {

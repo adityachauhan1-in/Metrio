@@ -25,7 +25,7 @@ mongoose
 .catch((err) => console.log(err))
 
 app.get("/" , (req,res) => {
-    res.send("Meerut Metro API  is running ,  Alright  ")
+    res.send("Meerut Metro API  is running ,  Alright You're booming man  ")
 })
 // after every 10 minute ticket is check Active or mark it expire if time gone . and not used 
 // Schedule cleanup every 10 minutes using setInterval
@@ -51,6 +51,6 @@ app.use("/admin", adminFeedbackRoute);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(` HII Server running on port ${PORT}`);
+  console.log(` HII Server running on port ->  ${PORT}`);
 
 });

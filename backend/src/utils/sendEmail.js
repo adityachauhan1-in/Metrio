@@ -1,23 +1,26 @@
 import nodemailer from "nodemailer";
  // For clear understanding look at the Explanation file 
 export const sendEmail = async (userEmail, ticketData) => {
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASSWORD;
+  if (!emailUser || !emailPass) {
+    console.error(
+      "[sendEmail] EMAIL_USER and EMAIL_PASSWORD must be set in backend .env (use a Gmail App Password if 2FA is on)"
+    );
+    return;
+  } 
+console.log("I am at email service")
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD, // must be App Password if 2FA on
+        user: emailUser,
+        pass: emailPass.replace(/\s/g, ""),
       },
-      logger: true, // nodemailer logs to console
-      debug: true,  // detailed SMTP logs SMTP -> Simple Mail Transfer Protocol (which help to send email )
     });
 
-    // Check connection before sending
-    await transporter.verify();
-    console.log("[sendEmail] transporter verified OK");
-
     const mailOption = {
-      from: process.env.EMAIL_USER,
+      from: emailUser,
       to: userEmail,
       subject: "Your Metro Ticket",
       html: `
@@ -34,7 +37,7 @@ export const sendEmail = async (userEmail, ticketData) => {
     };
 
     const info = await transporter.sendMail(mailOption);
-    // console.log("[sendEmail] email sent:", info.messageId, info.response);
+    console.log("[sendEmail] sent:", info.messageId);
   } catch (error) {
     console.error("[sendEmail] EMAIL ERROR:", {
       message: error.message,
@@ -42,6 +45,6 @@ export const sendEmail = async (userEmail, ticketData) => {
       command: error.command,
       response: error.response,
     });
-    throw error; // optional: rethrow so controller 500s
+    throw error;
   }
 };
