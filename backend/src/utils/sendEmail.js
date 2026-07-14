@@ -11,14 +11,24 @@ export const sendEmail = async (userEmail, ticketData) => {
   } 
 console.log("I am at email service")
   try {
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: emailUser,
+    //     pass: emailPass.replace(/\s/g, ""),
+    //   },
+    // });
+    console.log("here i edit transporter")
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      family: 4,           // Force IPv4
       auth: {
-        user: emailUser,
-        pass: emailPass.replace(/\s/g, ""),
+          user: emailUser,
+          pass: emailPass.replace(/\s/g, ""),
       },
-    });
-
+  });
     const mailOption = {
       from: process.env.EMAIL_USER,
       to: userEmail,

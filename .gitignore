@@ -13,3 +13,4 @@ yarn-error.log*
 # Build (future frontend)
 dist/
 build/
+Explanation.txt
