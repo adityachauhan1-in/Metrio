@@ -19,6 +19,7 @@ console.log("I am at email service")
     //   },
     // });
     console.log("here i edit transporter")
+  
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -29,6 +30,8 @@ console.log("I am at email service")
           pass: emailPass.replace(/\s/g, ""),
       },
   });
+  await transporter.verify();
+  console.log("SMTP VERIFIED");
     const mailOption = {
       from: process.env.EMAIL_USER,
       to: userEmail,
