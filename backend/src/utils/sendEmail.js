@@ -1,12 +1,15 @@
 import nodemailer from "nodemailer";
- // For clear understanding look at the Explanation file 
+import dns from "node:dns";
+dns.setDefaultResultOrder("ipv4first");
+// For clear understanding look at the Explanation file 
 export const sendEmail = async (userEmail, ticketData) => {
+  console.log("DNS is verified")
   const emailUser = process.env.EMAIL_USER;
   const emailPass = process.env.EMAIL_PASSWORD;
   if (!emailUser || !emailPass) {
     console.error(
-      "[sendEmail] EMAIL_USER and EMAIL_PASSWORD must be set in backend .env (use a Gmail App Password if 2FA is on)"
     );
+    "[sendEmail] EMAIL_USER and EMAIL_PASSWORD must be set in backend .env (use a Gmail App Password if 2FA is on)"
     return;
   } 
 console.log("I am at email service")
@@ -24,12 +27,11 @@ console.log("I am at email service")
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
-      family: 4,           // Force IPv4
       auth: {
-          user: emailUser,
-          pass: emailPass.replace(/\s/g, ""),
+        user: emailUser,
+        pass: emailPass.replace(/\s/g, ""),
       },
-  });
+    });
   await transporter.verify();
   console.log("SMTP VERIFIED");
     const mailOption = {
