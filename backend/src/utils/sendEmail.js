@@ -1,65 +1,38 @@
-// import nodemailer from "nodemailer";
-// import dns from "node:dns";
-// dns.setDefaultResultOrder("ipv4first");
-// // For clear understanding look at the Explanation file 
-// export const sendEmail = async (userEmail, ticketData) => {
-//   console.log("DNS is verified")
-//   const emailUser = process.env.EMAIL_USER;
-//   const emailPass = process.env.EMAIL_PASSWORD;
-//   if (!emailUser || !emailPass) {
-//     console.error(
-//     );
-//     "[sendEmail] EMAIL_USER and EMAIL_PASSWORD must be set in backend .env (use a Gmail App Password if 2FA is on)"
-//     return;
-//   } 
-// console.log("I am at email service")
-//   try {
-//     // const transporter = nodemailer.createTransport({
-//     //   service: "gmail",
-//     //   auth: {
-//     //     user: emailUser,
-//     //     pass: emailPass.replace(/\s/g, ""),
-//     //   },
-//     // });
-//     console.log("here i edit transporter")
-  
-//     const transporter = nodemailer.createTransport({
-//       host: "smtp.gmail.com",
-//       port: 587,
-//       secure: false,
-//       auth: {
-//         user: emailUser,
-//         pass: emailPass.replace(/\s/g, ""),
-//       },
-//     });
-//   await transporter.verify();
-//   console.log("SMTP VERIFIED");
-//     const mailOption = {
-//       from: process.env.EMAIL_USER,
-//       to: userEmail,
-//       subject: "Your Metro Ticket",
-//       html: `
-//         <h1>Ticket Confirmation</h1>
-//         <h2><strong>From:</strong> ${ticketData.from}</h2>
-//         <h2><strong>To:</strong> ${ticketData.to}</h2>
-//         <h2><strong>Fare:</strong> ₹${ticketData.fare}</h2>
-//         <h2><strong>TicketId:</strong> ${ticketData.ticketId}</h2>
-//         <h2><strong>Date:</strong> ${new Date().toLocaleString()}</h2>
-//         <h4><strong>Valid only till : </strong> ${ticketData.expiresAt}</h4>
-//         <br/>
-//         <h1>Thank you for booking with MetroFlow 🚇</h1>
-//       `,
-//     };
+import { Resend } from "resend";
 
-//     const info = await transporter.sendMail(mailOption);
-//     console.log("[sendEmail] sent:", info.messageId);
-//   } catch (error) {
-//     console.error("[sendEmail] EMAIL ERROR:", {
-//       message: error.message,
-//       code: error.code,
-//       command: error.command,
-//       response: error.response,
-//     });
-//     throw error;
-//   }
-// };
+
+export const sendEmail = async (userEmail, ticketData) => {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "MetroFlow <onboarding@resend.dev>",
+      to: userEmail,
+      subject: "Your Metro Ticket",
+
+      html: `
+      <h1>Ticket Confirmation</h1>
+
+      <p><strong>From:</strong> ${ticketData.from}</p>
+
+      <p><strong>To:</strong> ${ticketData.to}</p>
+
+      <p><strong>Fare:</strong> ₹${ticketData.fare}</p>
+
+      <p><strong>Ticket ID:</strong> ${ticketData.ticketId}</p>
+
+      <p><strong>Valid Till:</strong> ${ticketData.expiresAt}</p>
+
+      <h2>Thank you for booking MetroFlow 🚇</h2>
+      `,
+    });
+
+    if (error) {
+      console.error(error);
+      return; 
+    } 
+
+    console.log("Email sent", data);
+  } catch (err) {
+    console.error(err);
+  }
+};
