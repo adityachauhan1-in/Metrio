@@ -3,7 +3,8 @@ import TicketModel from '../models/TicketModel.js'
 import StationModel from '../models/StationModel.js'
 import { multiFare } from '../utils/fareCalculator.js';
 import UserModel from '../models/UserModel.js';
-import { sendEmail } from '../utils/sendEmail.js';
+// import { sendEmail } from '../utils/sendEmail.js';
+import { sendEmailtwo } from '../utils/sendEmailtwo.js';
 export const ticketBooking = async(req,res) => {
   try {
       //  ===1 >> extract from , to and journeyType from the req.body 
@@ -98,25 +99,42 @@ export const ticketBooking = async(req,res) => {
       });
 
       // Do not await email — ticket is already saved; SMTP must not block the HTTP response.
+      // UserModel.findById(userId)
+      //   .select("email")
+      //   .then((userDoc) => {
+      //     if (!userDoc?.email) {
+      //       console.warn("[ticketBooking] No email on file for user", userId);
+      //       return;
+      //     }
+      //     return sendEmail(userDoc.email, {
+      //       from: ticket.from,
+      //       to: ticket.to,
+      //       fare: ticket.fare,
+      //       ticketId: ticket.qrCode,
+      //       expiresAt: ticket.expiresAt,
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     console.error("[ticketBooking] Confirmation email failed:", err.message);
+      //   });
       UserModel.findById(userId)
-        .select("email")
-        .then((userDoc) => {
-          if (!userDoc?.email) {
-            console.warn("[ticketBooking] No email on file for user", userId);
-            return;
-          }
-          return sendEmail(userDoc.email, {
-            from: ticket.from,
-            to: ticket.to,
-            fare: ticket.fare,
-            ticketId: ticket.qrCode,
-            expiresAt: ticket.expiresAt,
-          });
-        })
-        .catch((err) => {
-          console.error("[ticketBooking] Confirmation email failed:", err.message);
+      .select("email")
+      .then((userDoc) => {
+        if (!userDoc?.email) {
+          console.warn("[ticketBooking] No email on file for user", userId);
+          return;
+        }
+        return sendEmailtwo(userDoc.email, {
+          from: ticket.from,
+          to: ticket.to,
+          fare: ticket.fare,
+          ticketId: ticket.qrCode,
+          expiresAt: ticket.expiresAt,
         });
-
+      })
+      .catch((err) => {
+        console.error("[ticketBooking] Confirmation email failed:", err.message);
+      });
       return;
 
   } catch (error) {
