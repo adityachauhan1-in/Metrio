@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import Alert from "../components/ui/Alert";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -13,8 +14,15 @@ export default function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const fromSignup = location.state?.fromSignup;
+    const [showPassword, setShowPassword] = useState(false);
 
+    const fromSignup = location.state?.fromSignup;
+    const [isLogin, setIsLogin] = useState(true);
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      password: "",
+    });
     // Only clear expired tokens, don't redirect automatically
     // Allow users to access login page even when logged in (to switch accounts)
     useEffect(() => {
@@ -23,7 +31,10 @@ export default function Login() {
             logout();
         }
     }, [token, isTokenValid, logout]);
-
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      };
     const handleLogin = async (e) => {
         e?.preventDefault();
         setError("");
@@ -49,6 +60,8 @@ export default function Login() {
         } finally {
             setLoading(false);
         }
+        
+ 
     };
 
     return (
@@ -66,7 +79,7 @@ export default function Login() {
                 )}
 
                 <form onSubmit={handleLogin} className="auth-form">
-                    <label htmlFor="login-email" className="auth-label">Email</label>
+                   <label htmlFor="login-email" className="auth-label">Email</label>
                     <input
                         id="login-email"
                         type="email"
@@ -77,18 +90,27 @@ export default function Login() {
                         className="auth-input"
                         autoComplete="email"
                     />
+                     
                     <label htmlFor="login-password" className="auth-label">Password</label>
-                    <input
-                        id="login-password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        placeholder="••••••••"
-                        className="auth-input"
-                        autoComplete="current-password"
-                    />
-                    <button type="submit" disabled={loading} className="auth-button">
+<div className="relative">
+    <input
+        id="login-password"
+        type={showPassword ? "text" : "password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        placeholder="••••••••"
+        className="auth-input"
+        autoComplete="current-password"
+    />
+    <span
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-indigo-600 transition"
+        onClick={() => setShowPassword((prev) => !prev)}
+    >
+        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+    </span>
+</div>
+                 <button type="submit" disabled={loading} className="auth-button">
                         {loading && <span className="loading-spinner" />}
                         {loading ? "Signing in…" : "Log in"}
                     </button>
