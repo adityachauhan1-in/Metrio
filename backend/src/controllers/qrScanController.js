@@ -15,34 +15,32 @@ export const scanTicket = async (req,res) => {
       ticketId = ticketId.split("TICKET_ID:")[1];
     }
 
-    const ticket =  await TicketModel.findById(ticketId);// check is the ticket is real or Not
-    if(!ticket){
- return res.status(404).json({message : "Invalid Ticket"});
-    }
-    // START PROGRESS FOR VALIDATION
+//     // START PROGRESS FOR VALIDATION
 
     const now  = new Date();
  
-    // Already used 
-    if(ticket.status == "used"){
-        return res.status(400).json({message : "Ticket already used "})
-    } 
-    // Expired by time(with the help of TimeStamp)
-    if(ticket.expiresAt < now){
-        ticket.status = "expire";
-      await    ticket.save();// we use await because to make change in database it takes time .
-   return res.status(400).json({message : "Ticket expired"})
-    }
-    // Expiry ticket
-    if(ticket.status == "expire"){
-        return res.status(400).json({message : "Ticket  expired"})
 
+const ticket = await TicketModel.findOneAndUpdate(
+  // condition and the update happen together.ss
+  {
+    _id: ticketId,
+    status: "active",
+    expiresAt: { $gt: new Date() }
+  },
+  {
+    $set: {
+      status: "used",
+      usedAt: new Date()
     }
-// Valid Ticket and mark it used 
-
-ticket.status = "used";
-ticket.usedAt = now;
-  await ticket.save();
+  },
+  { new: true }
+);
+  // await ticket.save();
+  if (!ticket) {
+    return res.status(400).json({
+        message: "Ticket is invalid, expired, or already used."
+    });
+}
 
   return res.status(200).json({
     message : "Ticket valid , Entry allowed",

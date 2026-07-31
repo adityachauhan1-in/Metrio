@@ -51,7 +51,17 @@ usedAt : {
     default : null
 }
 },
+
 {timestamps:true},
+  )
+  ticketSchema.index(
+    {user : 1} , 
+    {
+unique : true,
+partialFilterExpression : {
+    status : "active"
+}
+    }
   )
   export default mongoose.model("Ticket",ticketSchema);
      
